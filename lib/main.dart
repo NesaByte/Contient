@@ -1,6 +1,8 @@
 import 'package:http/http.dart';
 import 'package:flutter/material.dart';
 import 'package:web3dart/web3dart.dart';
+import 'package:web_socket_channel/io.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -44,39 +46,37 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  Client httpClient;
-  Web3Client ethClient;
+  String http_url = "http://127.0.0.1:7545";
+  String ws_url = "ws://127.0.0.1:7545/";
 
-  final String myAddress ="";
-  final infura = "https://rinkeby.infura.io/v3/a8204bf8b68b4cf593ace415879e53a9";
-  
-  @override
-  void initState(){
-    super.initState();
-    httpClient = Client();
-    ethClient = Web3Client(infura, httpClient);
-    //get something(myAddress)
+  Future<void> sendEther() async{
+    Web3Client client = Web3Client(http_url, Client(), socketConnector: (){
+      return IOWebSocketChannel.connect(ws_url).cast<String>();
+    });
+
+    String privateKey1 = "5ced48571b7097f487c4a261cf457874b68d02183b477c2993ab39f48be26478";
+
+    Credentials cred = await client.credentialsFromPrivateKey(privateKey1);
+
+    EthereumAddress ownAddress = await cred.extractAddress();
+    print(ownAddress);
+
+    //client.sendTransaction(cred, Transaction(from: ownAddress));
   }
 
-  Future<List<dynamic>> query(String functionName, List <dynamic> argss) async{
-    final contract = await loadContract();
-  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body: Center( child: Text("hi")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: sendEther,
+        child: Icon(Icons.add),
       ),
     );
   }

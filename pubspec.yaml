@@ -28,9 +28,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
-  web3dart: ^2.0.0-dev.9 #connects to interact with the Ethereum blockchain
-  velocity_x: 1.4.1 #easy UI
-  http: ^0.12.2
+  web3dart: ^2.0.0-dev.9        # Connects to interact with the Ethereum blockchain
+  web_socket_channel: ^1.2.0    # Provides StreamChannel wrappers for WebSocket connections
+  http: ^0.12.2                 # To consume HTTP resources
 
 dev_dependencies:
   flutter_test:
